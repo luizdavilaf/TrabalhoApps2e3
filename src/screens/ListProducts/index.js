@@ -5,6 +5,8 @@ import { AuthContext } from "../../contexts/auth/auth";
 import { fetchProducts } from "../../api/products";
 import { ActivityIndicator } from "react-native-web";
 
+//https://shopee.com.br/storemagia16?shop=338226263&tab=1
+
 export default function Home(props) {
 
     const [name, setName] = useState('')

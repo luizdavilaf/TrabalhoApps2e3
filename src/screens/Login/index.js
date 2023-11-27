@@ -13,9 +13,10 @@ import styled from 'styled-components/native';
 import { Ionicons } from '@expo/vector-icons';
 import plus from '../../../assets/plus-circle.svg';
 import help from '../../../assets/help-circle.svg';
-import SignupScreen from '../Signup/index';
+import Cadastrar from '../Signup/index';
 import { useNavigation } from '@react-navigation/native';
 
+//https://shopee.com.br/seller/login?next=https%3A%2F%2Fseller.shopee.com.br%2F
 
 export default function Login(props) {
     const navigation = useNavigation();
@@ -132,7 +133,7 @@ export default function Login(props) {
             <ContainerFooter>
                 <FooterText>Ainda não tem uma conta?
                     <Separator></Separator>
-                    <Signup onPress={() => navigation.navigate('SignupScreen')}>
+                    <Signup onPress={() => navigation.navigate('Cadastrar')}>
                         Cadastrar
                     </Signup>
                 </FooterText>
