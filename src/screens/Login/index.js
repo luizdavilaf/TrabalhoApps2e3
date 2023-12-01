@@ -102,7 +102,7 @@ export default function Login(props) {
                         fazLogin();
                     }}
                 >
-                    <ButtonText>Entre</ButtonText>
+            <ButtonText disabled={!username || !password}>Entre</ButtonText>
                 </StyledButton>
                 <ContainerWithSMS>
                     <LoginwithSMS >
@@ -205,11 +205,13 @@ font-size: 1rem;
   flex: 1;
   height: 40px;
   color: #ccc;
+  padding: 8px;
 `;
 
 
 const StyledButton = styled.TouchableOpacity`
   background-color: ${({ disabled }) => (disabled ? '#ccc' : '#ee4d2d')};
+   
   padding: 10px 15px;  
   align-items: center;
   justify-content: center;
@@ -219,7 +221,7 @@ const StyledButton = styled.TouchableOpacity`
 `;
 
 const ButtonText = styled.Text`
-  color: #fff;
+  color: ${({ disabled }) => (disabled ? "#00000042" : '#fafafa')}; 
   font-size: 16px;
   width: 100%;
   text-align: center;
@@ -309,14 +311,13 @@ const Arrow = styled.Image`
 `;
 
 const Form = styled.View`
-    min-height: calc(100% - 92px);
-   
+min-height: calc(100% - 92px);
 flex-direction: column;
-  width: 100%;  
-      padding: 22px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
+width: 100%;  
+padding: 22px;
+justify-content: center;
+align-items: center;
+display: flex;
 `;
 
 const ContainerOtherSigns = styled.View`
