@@ -7,6 +7,8 @@ import { Button, StyleSheet, Text, View, Image, TouchableOpacity, Linking } from
 import { TextInput } from "react-native-web";
 import { Ionicons } from '@expo/vector-icons';
 import iconPng from '../../../assets/logoshopee.png';
+import { ErrorToast, SuccessToast } from '../../components/Toast/index.js';
+import Loader from '../../components/Loader';
 
 // Componente principal
 const SignUpForm = () => {
@@ -20,8 +22,11 @@ const SignUpForm = () => {
         followers: 794,
         image: '',
     });
-
+    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [messageResponse, setmessageResponse] = useState("");
 
     // Função para lidar com as mudanças nos campos do formulário
     const handleChange = (name, value) => {       
@@ -31,20 +36,51 @@ const SignUpForm = () => {
         });
     };
 
+    const handleShowError = () => {
+        setShowError(true);
+        setTimeout(() => setShowError(false), 2500);
+    };
+
+    const handleShowSuccess = () => {
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 2500);
+    };
+
     // Função para lidar com o envio do formulário
-    const handleSubmit = async() => {
+    const cadastrar = async() => {
+        let response
         try {
-            const response = await api.post('/noauth/merchants/', formData);
-            
+            setLoading(true);
+            console.log("antes")
+            response = await api.post('/noauth/merchants/', formData);
+            console.log("depois")
+            setmessageResponse("Usuário cadastrado com sucesso")
+            handleShowSuccess()
+            navigation.navigate('Login')
+        
         } catch (error) {
+            console.log(error)
+            setmessageResponse(`Erro ao cadastrar usuário. ${response?.data?.message || ""}`)
+            handleShowError()
             
+        }finally{
+            setLoading(false);
+            
+            console.log('Dados do formulário enviados:', response, formData);
         }
-        console.log('Dados do formulário enviados:', formData);
+        
     };
 
     return (
+        
         <Container>
-            <Form onSubmit={handleSubmit}>
+            <div>                
+                {loading && <Loader />}
+                {showError && <ErrorToast> {messageResponse} </ErrorToast>}
+                {showSuccess && <SuccessToast>{messageResponse}</SuccessToast>}
+            </div>
+          
+            <Form>
                 <ImageContainer>
                     <Logo source={iconPng} />
                 </ImageContainer>
