@@ -13,10 +13,13 @@ const spin = keyframes`
 `;
 
 const LoaderContainer = styled.div`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
   display: inline-block;
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top: 4px solid #3498db; /* Blue color for the loader */
+  border-top: 4px solid #ee4d2d; 
   width: 40px;
   height: 40px;
   animation: ${spin} 1s linear infinite;

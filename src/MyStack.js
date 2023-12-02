@@ -4,12 +4,14 @@ import { useContext, useState } from 'react';
 import Home from './screens/ListProducts';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
+import RegisterProduct from './screens/CreateProduct';
 import { AuthProvider, AuthContext } from './contexts/auth/auth';
 import { Image } from 'react-native';
 import styled from 'styled-components/native';
 import arrowleft from '../assets/arrow-left.svg';
 import helpcircle from '../assets/help-circle.svg';
-import { StyleSheet } from 'react-native';
+
+
 const Stack = createStackNavigator();
 
 export function MyStack() {
@@ -17,6 +19,7 @@ export function MyStack() {
   return (
     <NavigationContainer>
       <Stack.Navigator 
+      
         screenOptions={{
           headerStyle: {
             backgroundColor: '#fafafa', 
@@ -30,10 +33,9 @@ export function MyStack() {
               style={{ width: 30, height: 30, marginRight: 2, paddingRigth: 2}} 
             />
           ),          
-          headerRight: () => (
-            // Usando o componente Styled para estilizar a imagem à direita do cabeçalho
+          headerRight: () => (           
             <StyledImageRight
-              source={helpcircle} // Substitua pelo caminho da sua imagem local
+              source={helpcircle} 
               style={{ width: 25, height: 25, marginRight: 10, paddingRigth: 2 }}
             />
           ),          
@@ -51,10 +53,12 @@ export function MyStack() {
             color: 'rgba(0,0,0,0.70)', 
           },
         }}>
-        {isLogged ? (<Stack.Screen name="Home" component={Home} />) 
+        {isLogged ? (<Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />) 
         : (<Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />)}
         <Stack.Screen name="Cadastrar" component={Signup} />
+        <Stack.Screen name="Registrar Produto" component={RegisterProduct} />
       </Stack.Navigator>
+      
     </NavigationContainer>
   );
 }

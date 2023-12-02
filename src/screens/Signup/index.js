@@ -9,6 +9,8 @@ import { Ionicons } from '@expo/vector-icons';
 import iconPng from '../../../assets/logoshopee.png';
 import { ErrorToast, SuccessToast } from '../../components/Toast/index.js';
 import Loader from '../../components/Loader';
+import api from "../../api/api";
+import  Toast  from 'react-native-toast-message';
 
 // Componente principal
 const SignUpForm = () => {
@@ -23,10 +25,9 @@ const SignUpForm = () => {
         image: '',
     });
     const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [showError, setShowError] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);    
     const [messageResponse, setmessageResponse] = useState("");
+    
 
     // Função para lidar com as mudanças nos campos do formulário
     const handleChange = (name, value) => {       
@@ -36,36 +37,41 @@ const SignUpForm = () => {
         });
     };
 
-    const handleShowError = () => {
-        setShowError(true);
-        setTimeout(() => setShowError(false), 2500);
+    const handleShowToast = (message, type) => {
+        Toast.show({
+            type: type,
+            text1: message,
+            visibilityTime: 2000,            
+            autoHide: true,
+           
+            
+            
+        });
     };
 
-    const handleShowSuccess = () => {
-        setShowSuccess(true);
-        setTimeout(() => setShowSuccess(false), 2500);
-    };
+   
+
 
     // Função para lidar com o envio do formulário
     const cadastrar = async() => {
-        let response
+        let response;
         try {
             setLoading(true);
-            console.log("antes")
             response = await api.post('/noauth/merchants/', formData);
-            console.log("depois")
-            setmessageResponse("Usuário cadastrado com sucesso")
-            handleShowSuccess()
-            navigation.navigate('Login')
-        
+           
+            handleShowToast("Usuário cadastrado com sucesso", "success");
+
+            // Aguarda 2.5 segundos antes de redirecionar
+            setTimeout(() => {
+                navigation.navigate('Login');
+            }, 2500);
+
         } catch (error) {
-            console.log(error)
-            setmessageResponse(`Erro ao cadastrar usuário. ${response?.data?.message || ""}`)
-            handleShowError()
-            
-        }finally{
+            console.log(error);            
+            handleShowToast(`Erro ao cadastrar usuário. ${error.message}`,"error");
+
+        } finally {
             setLoading(false);
-            
             console.log('Dados do formulário enviados:', response, formData);
         }
         
@@ -76,10 +82,10 @@ const SignUpForm = () => {
         <Container>
             <div>                
                 {loading && <Loader />}
-                {showError && <ErrorToast> {messageResponse} </ErrorToast>}
-                {showSuccess && <SuccessToast>{messageResponse}</SuccessToast>}
+               
             </div>
-          
+            <ToastContainer> <Toast /></ToastContainer>
+           
             <Form>
                 <ImageContainer>
                     <Logo source={iconPng} />
@@ -145,7 +151,7 @@ const SignUpForm = () => {
                     </StyledButton>
             </Form>
             <ContainerFooter>
-                <FooterText>Ainda não tem uma conta?
+                <FooterText>Já tem uma conta?
                     <Separator></Separator>
                     <Signup onPress={() => navigation.navigate('Login')}>
                         Entre
@@ -156,6 +162,11 @@ const SignUpForm = () => {
     );
 };
 
+
+const ToastContainer = styled.View`
+ 
+  z-index: 999; 
+`;
 
 const ContainerFooter = styled.View`
 width: 100%;
@@ -196,7 +207,8 @@ color: rgba(0,0,0,.54);
 const Container = styled.View`
 fontStyle: "Roboto",
 background-color: #fff;
-position: absolute;
+position: relative;
+overflow: visible;
 top: 0;
 left: 0;
 right: 0;

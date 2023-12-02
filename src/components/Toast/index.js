@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -19,10 +20,12 @@ const fadeOut = keyframes`
 `;
 
 const ToastContainer = styled.div`
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  position: fixed;  
   padding: 10px 20px;
   border-radius: 5px;
   color: #fff;
@@ -31,11 +34,11 @@ const ToastContainer = styled.div`
 `;
 
 const ErrorToast = styled(ToastContainer)`
-  background-color: #ff3333; /* Red for error */
+  background-color: #ff3333; 
 `;
 
 const SuccessToast = styled(ToastContainer)`
-  background-color: #00cc00; /* Green for success */
+  background-color: #00cc00; 
 `;
 
 export { ErrorToast, SuccessToast };

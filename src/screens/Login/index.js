@@ -15,17 +15,19 @@ import plus from '../../../assets/plus-circle.svg';
 import help from '../../../assets/help-circle.svg';
 import Cadastrar from '../Signup/index';
 import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
+import { ActivityIndicator } from "react-native-web";
 
 //https://shopee.com.br/seller/login?next=https%3A%2F%2Fseller.shopee.com.br%2F
 
 export default function Login(props) {
     const navigation = useNavigation();
 
-    const { signIn } = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    
+  const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         console.log('Mounting Login');
@@ -34,11 +36,29 @@ export default function Login(props) {
         }
     }, []);
 
-   
 
-    const fazLogin = () => {
-        console.log('Fazendo login com usename: ' + username + ' e senha: ' + password);
-        signIn(username, password);
+  const showToast = (message) => {
+    Toast.show({
+      type: "error",
+      text1: message,
+      visibilityTime: 2000,
+      autoHide: true,
+
+
+
+    });
+  };
+
+    const fazLogin = async () => {
+       try {
+         setLoading(true);
+         console.log('Fazendo login com usename: ' + username + ' e senha: ' + password);
+         await signIn(username, password);        
+       } catch (error) {        
+         showToast(error.message);
+       } finally {
+         setLoading(false);
+       }
     };
 
    
@@ -47,6 +67,7 @@ export default function Login(props) {
 
     return (
         <Container>
+          <ToastContainer><Toast></Toast></ToastContainer>
             <HeaderStack>
                 <Arrow source={arrowleft} />
                 <HeaderText>
@@ -57,8 +78,10 @@ export default function Login(props) {
                     <ImgLogo source={help} />
                 </ContainerIconsHeader>
             </HeaderStack>
-
+        
             <Form>
+          {loading ? <ActivityIndicator /> :
+            <>
                 <ImageContainer>
                     <Logo source={iconPng} />
                 </ImageContainer>
@@ -128,8 +151,9 @@ export default function Login(props) {
                         </LoginText>
                     </ContainerLogs>
                 </ContainerOtherSigns>
+            </>}
             </Form>
-
+       
             <ContainerFooter>
                 <FooterText>Ainda não tem uma conta?
                     <Separator></Separator>
@@ -155,6 +179,11 @@ const Container = styled.View`
     
             
   
+`;
+
+const ToastContainer = styled.View`
+ 
+  z-index: 999; 
 `;
 
 const Logo = styled.Image`
