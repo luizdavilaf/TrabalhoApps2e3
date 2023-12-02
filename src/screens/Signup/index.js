@@ -205,7 +205,7 @@ color: rgba(0,0,0,.54);
 `
 // Estilos usando Styled Components
 const Container = styled.View`
-fontStyle: "Roboto",
+fontStyle: "Roboto";
 background-color: #fff;
 position: relative;
 overflow: visible;
