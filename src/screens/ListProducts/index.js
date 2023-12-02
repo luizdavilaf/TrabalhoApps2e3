@@ -113,7 +113,7 @@ export default function Home(props) {
                             <NavItem onPress={() => navigation.navigate('Registrar Produto')}>Novo Produto</NavItem>
                       </Wrapper>
                       <Wrapper>
-                            <NavItem><DivSelected>Categorias</DivSelected></NavItem>
+                            <NavItem><DivSelected>Produtos</DivSelected></NavItem>
                       </Wrapper>
                       <Wrapper>
                         <NavItem>Categorias</NavItem>
@@ -153,7 +153,7 @@ export default function Home(props) {
 
 
 const Container = styled.View`  
-  background-color: #fefefe;
+  background-color: #e0e0e0;
   font-family: Arial;
 `;
 
@@ -188,7 +188,7 @@ const NavBar = styled.View`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  background-color: rgba(255,87,34,0.1);
+  background-color: #e0e0e0;
 `;
 
 const SubNavBar = styled.View`  
@@ -196,7 +196,7 @@ const SubNavBar = styled.View`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  background-color: rgba(255,87,34,0.1);
+  background-color: #e0e0e0;
   margin-bottom: 5px;
 `;
 
