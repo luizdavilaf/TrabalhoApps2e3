@@ -4,17 +4,16 @@ import styled from 'styled-components/native';
 
 
 const SingleCardContainer = styled.View`  
-background-color: white;
-  margin: 2px;
-  width: 49%; 
-  
+  background-color: white;
+  padding: 0 0 10px 0;
 `;
 
 const AllCardContainer = styled.View`  
-  flex-direction: row;
-  flex-wrap: wrap;  
-  width: 100%;
-
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100vw;
+  gap: 5px;
+  padding: 0 5px;
 `;
 
 const CardImage = styled.Image`
@@ -25,11 +24,17 @@ const CardImage = styled.Image`
 const CardTitle = styled.Text`
   font-size: 13px;
   margin-bottom: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; 
+  max-width: 100%;  
+  padding: 0 10px;
 `;
 
 const CardPrice = styled.Text`
   font-size: 16px;
   color: red;
+  padding: 0 10px;
 `;
 
 const Card = ({ product }) => {
@@ -37,7 +42,7 @@ const Card = ({ product }) => {
         <SingleCardContainer>
             <CardImage source={product.image} alt={product.title} />
             <CardTitle>{product.title}</CardTitle>
-            <CardPrice>{`R$${product.price.toFixed(2)}`}</CardPrice>
+            <CardPrice>{`R$${product.price.toFixed(2).replace(".", ",")}`}</CardPrice>
         </SingleCardContainer>
     );
 };

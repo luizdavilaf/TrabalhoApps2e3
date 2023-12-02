@@ -13,6 +13,7 @@ import Loader from '../../components/Loader';
 import api from "../../api/api";
 import  Toast  from 'react-native-toast-message';
 import { fetchCategories } from "../../api/categories.js";
+import { Picker } from '@react-native-picker/picker';
 
 // Componente principal
 const SignUpForm = () => {
@@ -20,8 +21,7 @@ const SignUpForm = () => {
     // Estado para armazenar os dados do formulário
     const [formData, setFormData] = useState({
         title: '',
-        price: 0,
-        password: '',
+        price: null,       
         avaliations: 4.9,
         quantity_sold: 794,
         image: '',
@@ -29,8 +29,7 @@ const SignUpForm = () => {
     });
 
     const { user } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);   
+    const [loading, setLoading] = useState(false);   
     const [categories, setCategories] = useState([]); 
     const [messageResponse, setmessageResponse] = useState("");
     
@@ -119,45 +118,25 @@ const SignUpForm = () => {
                 <InputContainer>
                     <StyledTextInput
                         type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChangeText={(value) => handleChange("name", value)}
-                        placeholder="Nome do estabelecimento"
+                        id="title"
+                        name="title"
+                        value={formData.title}
+                        onChangeText={(value) => handleChange("title", value)}
+                        placeholder="Nome do produto"
                         required
                     />
                 </InputContainer>
                 <InputContainer>
                 <StyledTextInput
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                        onChangeText={(value) => handleChange("username", value)}
-                    placeholder="Username"
+                    type="number"
+                        id="price"
+                        name="price"
+                        value={formData.price}
+                        onChangeText={(value) => handleChange("price", value)}
+                    placeholder="Preço do produto"
                     required
                 />
-                </InputContainer>
-                <InputContainer>
-                <StyledTextInput
-                    type="password"
-                    id="password"
-                    name="password"
-                        secureTextEntry={!showPassword}
-                    value={formData.password}
-                        onChangeText={(value) => handleChange("password", value)}
-                    placeholder="Senha"
-                    required
-                />
-                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <Ionicons
-                            name={showPassword ? 'ios-eye-off' : 'ios-eye'}
-                            size={24}
-                            color="#888"
-                            style={{ marginRight: 10 }}
-                        />
-                    </TouchableOpacity>
-                </InputContainer>
+                </InputContainer>                
                 <InputContainer>
                 <StyledTextInput
                     type="text"
@@ -165,25 +144,28 @@ const SignUpForm = () => {
                     name="image"
                     value={formData.image}
                         onChangeText={(value) => handleChange("image", value)}
-                    placeholder="url imagem"
+                    placeholder="Url imagem"
                     required
                 />
                 </InputContainer>
-                <StyledButton type="submit" disabled={!formData.username || !formData.password || !formData.name}
+                <InputContainer>
+                    <StyledPicker    
+                        value={formData.categoryId}                    
+                        onValueChange={(itemValue) => handleChange("categoryId", itemValue)}
+                    >
+                        {categories.map((category) => (
+                            <Picker.Item key={category.id} label={category.title} value={category.id} />
+                        ))}
+                    </StyledPicker>
+                </InputContainer>
+                <StyledButton type="submit" disabled={!formData.title || !formData.price}
                     onPress={() => {
                         cadastrar();
                     }}>
-                    <ButtonText disabled={!formData.username || !formData.password}>Próximo</ButtonText>
+                    <ButtonText disabled={!formData.title || !formData.price}>Cadastrar</ButtonText>
                     </StyledButton>
             </Form>
-            <ContainerFooter>
-                <FooterText>Já tem uma conta?
-                    <Separator></Separator>
-                    <Signup onPress={() => navigation.navigate('Login')}>
-                        Entre
-                    </Signup>
-                </FooterText>
-            </ContainerFooter>
+            
         </Container>
     );
 };
@@ -194,13 +176,17 @@ const ToastContainer = styled.View`
   z-index: 999; 
 `;
 
-const ContainerFooter = styled.View`
-width: 100%;
-height: 50px;
-color: rgba(0,0,0,.54);
-background-color: #fafafa;
-justify-content: center;
-align-items: center;
+const SelectContainer = styled.View`
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+`;
+
+const StyledPicker = styled(Picker)`
+ font-size: 1rem;
+flex: 1;
+height: 40px;
 `;
 
 const ButtonText = styled.Text`
@@ -256,6 +242,7 @@ display: flex;
 
 const StyledTextInput = styled.TextInput`
 font-size: 1rem;
+padding: 5px;
 flex: 1;
 height: 40px;
 color: rgba(0,0,0,.87);

@@ -6,10 +6,13 @@ import { fetchProducts } from "../../api/products";
 import { ActivityIndicator } from "react-native-web";
 import { ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
-import arrowleft from '../../../assets/arrow-left.svg';
+import styled2, { keyframes } from 'styled-components';
+import moment from "moment/moment";
+import arrowleft from '../../../assets/arrow-white.svg';
 import filter from '../../../assets/filter.svg';
 import dots from '../../../assets/more.svg';
 import { useNavigation } from '@react-navigation/native';
+import star from '../../../assets/star.png';
 //https://shopee.com.br/storemagia16?shop=338226263&tab=1
 
 export default function Home(props) {
@@ -18,12 +21,14 @@ export default function Home(props) {
     const { user } = useContext(AuthContext);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    
+    
+    
     // Dimensions.get('window' | 'screen').width|height
     const loadData = async () => {
         setLoading(true);
         try {
-            const productsData = await fetchProducts()            
+            const productsData = await fetchProducts() 
             setProducts(productsData.data);
         } catch (error) {
             console.log(error);
@@ -42,12 +47,10 @@ export default function Home(props) {
         }
     }, []);
 
-  
+
 
     return (
         <Container >
-            
-            
             {loading ? <ActivityIndicator /> :
                 <>
                     <ParentHeaderStack>
@@ -55,13 +58,13 @@ export default function Home(props) {
                         <BackgroundImage source={user.image}>
                                 <ContainerTransparency>
                             <HeaderStack>
-                                <Arrow source={arrowleft} />
-                                    
-                                    
-                                
-                                <HeaderText>
-                                    implementar barra de busca
-                                </HeaderText>
+                                <Arrow source={arrowleft} />   
+                                        
+                                            <StyledTextInput placeholder={user.name}>
+                                                
+                                            </StyledTextInput>
+                                                                        
+                                        
                                 <ContainerIconsHeader>
                                         <ImgLogo source={filter } />
                                             <ImageButton onPress={() => navigation.navigate('Registrar Produto')}>    <ImgLogo source={dots}  /></ImageButton>
@@ -71,9 +74,32 @@ export default function Home(props) {
                             <ContainterShopInfos>
                                         <ContainterImageShop source={user.image}></ContainterImageShop>
                                         <ContainerShopTexts>
+                                            <ShopNameText>{user.name}</ShopNameText>
+                                            <ShopActivityText>Ativo há 2 horas atrás</ShopActivityText>
+                                            <ShopValuationContainer>
+                                                <ShopRatingContainer>
+                                                    <StarIcon source={star}></StarIcon>
+                                                    <RatingText>{user.avaliations.toString()}/5.0</RatingText>
+                                                </ShopRatingContainer>
+                                                <Separator>|</Separator>
+                                                <FollowersText>
+                                                    {user.followers} seguidores               
+                                                </FollowersText>
+                                            </ShopValuationContainer>
 
                                         </ContainerShopTexts>
                                         <ContainerShopBottons>
+                                            <ContainerBottom>
+                                                <ContainerBottomText>
+                                                    +Seguir
+                                                </ContainerBottomText>
+                                                
+                                            </ContainerBottom>
+                                            <ContainerBottom>
+                                                <ContainerBottomText>
+                                                    Chat
+                                                </ContainerBottomText>
+                                            </ContainerBottom>
 
                                         </ContainerShopBottons>
 
@@ -82,6 +108,35 @@ export default function Home(props) {
                         </BackgroundImage>
                         </ContainerHeaderContent>
                     </ParentHeaderStack>
+                    <NavBar>
+                      <Wrapper>
+                            <NavItem onPress={() => navigation.navigate('Registrar Produto')}>Novo Produto</NavItem>
+                      </Wrapper>
+                      <Wrapper>
+                            <NavItem><DivSelected>Categorias</DivSelected></NavItem>
+                      </Wrapper>
+                      <Wrapper>
+                        <NavItem>Categorias</NavItem>
+                      </Wrapper>
+                    </NavBar>
+                    <SubNavBar>
+                      <Wrapper2>
+                            <SubNavItem>
+                                <DivSelected>
+                                Popular
+                                </DivSelected>
+                            </SubNavItem>
+                      </Wrapper2>
+                      <Wrapper2>
+                        <SubNavItem>Mais recente</SubNavItem>
+                      </Wrapper2>
+                      <Wrapper2>
+                        <SubNavItem>Em Destaque</SubNavItem>
+                      </Wrapper2>
+                      <Wrapper2>
+                        <SubNavItem>Preço</SubNavItem>
+                      </Wrapper2>
+                    </SubNavBar>
                     <ScrollView>
                         <AllCardContainer>
                         
@@ -98,18 +153,156 @@ export default function Home(props) {
 
 
 const Container = styled.View`  
-  background-color: #fef6f5;
+  background-color: #fefefe;
+  font-family: Arial;
 `;
 
-const ImageButton = styled(TouchableOpacity)`
+
+const Wrapper = styled2.div`
+  &:hover ${NavItem} {
+    color: #ee4d2d;
+    border-bottom: 2px solid #ee4d2d;
+  }
+
+`;
+
+const DivSelected = styled2.div`
+color: #ee4d2d;  
+`;
+
+
+const StyledTextInput = styled.TextInput`
+font-size: 1rem;
+padding: 10px;
+flex: 1;
+height: 40px;
+width: 100%;
+background-color: rgba(0,0,0,.25);
+color: grey;
+align-items: center;
+  justify-content: center;
+`;
+
+const NavBar = styled.View`  
+  height: 50px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background-color: rgba(255,87,34,0.1);
+`;
+
+const SubNavBar = styled.View`  
+  height: 50px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  background-color: rgba(255,87,34,0.1);
+  margin-bottom: 5px;
+`;
+
+const NavItem = styled(TouchableOpacity)`  
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  `;
+
+const Wrapper2 = styled2.div`
+  &:hover ${SubNavItem} {
+    color: #ee4d2d;
+  }
+`
+
+const ContainerBottom = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  width: 80px;
+`
+
+const ContainerBottomText = styled.Text`
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-size: 1.0rem;
+  color: white;
+  margin-bottom: 2px;
+`
+
+const SubNavItem = styled.View`  
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  `;
+
+const Separator = styled.Text`
+  margin: 0 5px;
+  font-size: .7rem;
+  color: white;
+`;
+
+const ShopNameText = styled.Text`
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-size: 1.0rem;
+  color: white;   
+`;
+
+const RatingText = styled.Text`
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-size: .7rem;
+  color: white;
+  line-height: 0;
+`;
+
+const FollowersText = styled.Text`
+flex-grow: 1;
+  flex-shrink: 1;
+  font-size: .7rem;
+  color: white;
   
+    
 `;
 
-const ContainerTransparency = styled.View`
-background-color: rgba(128, 128, 128, 0.5);
-height: 100%;
-   width: 100%;
+const ShopActivityText = styled.Text`
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-size: .8rem;
+  margin-bottom: 3px;
+  color: red;
+    
+`;
 
+const ShopValuationContainer = styled.View`  
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+`;
+
+
+const ShopRatingContainer = styled.View`  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 3px;
+    background-color: rgba(0, 0, 0, .15);
+    border-radius: 10px;
+    padding: 0 5px;
+    height: 20px;
+    `;
+
+const ContainterShopInfos = styled.View`  
+  width: 100%;
+  display: grid;
+  grid-template-columns: 60px 1fr 90px;
+  padding: 15px 10px;
 `;
 
 const ContainterImageShop = styled.Image`
@@ -119,30 +312,45 @@ const ContainterImageShop = styled.Image`
    background-color: transparent;
 `;
 
-const ContainterShopInfos = styled.View`  
-  
-`;
-
 const ContainerShopTexts = styled.View`  
-  
+  display: flex;
+  flex-direction: column;
+  color: white;
+  padding: 0 10px;
 `;
 
 const ContainerShopBottons = styled.View`  
-  
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const StarIcon = styled.Image`
+  height: 13px;
+  width: 13px;
+`;
+
+
+
+const ContainerTransparency = styled.View`
+background-color: rgba(116, 100, 138, .8); 
+height: 100%;
+   width: 100%;
+
+`;
+
+const ImageButton = styled(TouchableOpacity)`  
 `;
 
 const ContainerHeaderContent = styled.View`  
    height: 100%;
-   width: 100%;
+   width: 100%;   
 `;
 
 const ParentHeaderStack = styled.View`
-  top: 0;
-  left: 0;
-  right: 0;
   height: 130;
   width: 100%;
- 
+
   color: #fff;
   flex-direction: row;
   justify-content: space-between;
@@ -150,12 +358,10 @@ const ParentHeaderStack = styled.View`
 `;
 
 const HeaderStack = styled.View`
-  top: 0;
-  left: 0;
-  right: 0;
+
   height: 2.75rem;
   width: 100%;
- 
+  padding-top: 10px;
   
   flex-direction: row;
   justify-content: space-between;
@@ -170,8 +376,9 @@ const HeaderText = styled.Text`
 `;
 
 const Arrow = styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
+  color: white !important
   
 `;
 
@@ -193,5 +400,6 @@ const ImgLogo = styled.Image`
 const BackgroundImage = styled(ImageBackground)`
   flex: 1;
   justify-content: center;
-  align-items: center;
+  align-items: center;  
+  background: rgba(0, 0, 0, 1)
 `;
